@@ -18,7 +18,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           
           {/* Home page - accessible to both guests and authenticated users */}
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<RegisterPage />} />
           
           {/* Protected Routes - require authentication */}
           <Route path="/chapter/:id" element={
