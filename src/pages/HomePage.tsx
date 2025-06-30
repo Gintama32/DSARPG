@@ -5,6 +5,7 @@ import { AudioPlayer, AudioPlayerRef } from '../components/AudioPlayer';
 import { UserMenu } from '../components/ui/UserMenu';
 import { useAuth } from '../context/AuthContext';
 import { chapters } from '../data/chapters';
+import { Link } from 'react-router-dom';
 
 export function HomePage() {
   const audioPlayerRef = useRef<AudioPlayerRef>(null);
@@ -17,12 +18,12 @@ export function HomePage() {
         {user ? (
           <UserMenu />
         ) : (
-          <a
-            href="/login"
+          <Link
+            to="/login"
             className="bg-purple-600 hover:bg-purple-700 text-white border-2 border-purple-500 font-pixel text-xs py-2 px-4 rounded transition-colors"
           >
             Sign In / Register
-          </a>
+          </Link>
         )}
       </div>
 
@@ -58,12 +59,12 @@ export function HomePage() {
           <p className="text-sm font-pixel text-purple-300 leading-relaxed mb-2">
             Welcome, Guest! You have full access. Want to save your progress?
           </p>
-          <a
-            href="/login"
+          <Link
+            to="/login"
             className="text-xs font-pixel text-purple-400 hover:text-purple-300 underline transition-colors"
           >
             Sign In or Register
-          </a>
+          </Link>
         </motion.div>
       )}
 
