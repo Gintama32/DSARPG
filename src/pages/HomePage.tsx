@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChapterCard } from '../components/ChapterCard';
 import { AudioPlayer, AudioPlayerRef } from '../components/AudioPlayer';
@@ -6,10 +6,37 @@ import { UserMenu } from '../components/ui/UserMenu';
 import { useAuth } from '../context/AuthContext';
 import { chapters } from '../data/chapters';
 import { Link } from 'react-router-dom';
+import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 
 export function HomePage() {
   const audioPlayerRef = useRef<AudioPlayerRef>(null);
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  const [musicPrompt, setMusicPrompt] = useState(false);
+
+  useEffect(() => {
+    // Try to play music on mount
+    const tryPlay = async () => {
+      try {
+        await audioPlayerRef.current?.play();
+      } catch {
+        setMusicPrompt(true);
+      }
+    };
+    tryPlay();
+  }, []);
+
+  const handleStartMusic = () => {
+    audioPlayerRef.current?.play();
+    setMusicPrompt(false);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <LoadingSpinner message="Loading..." />
+      </div>
+    );
+  }
 
   return (
     <div className="py-12 relative">
@@ -35,6 +62,14 @@ export function HomePage() {
         loop={true}
         volume={0.3}
       />
+      {musicPrompt && (
+        <button
+          onClick={handleStartMusic}
+          className="fixed top-4 right-1/2 bg-purple-600 text-white px-4 py-2 rounded z-50 shadow-lg border-2 border-purple-400 font-pixel animate-bounce"
+        >
+          ▶️ Click to enable music
+        </button>
+      )}
 
       {/* Welcome Message for Authenticated Users */}
       {user ? (

@@ -5,6 +5,7 @@ import { ChapterDetail } from './pages/ChapterDetail';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { AnimatedBackground } from './components/AnimatedBackground';
+import { HomePage } from './pages/HomePage';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           
           {/* Home page - accessible to both guests and authenticated users */}
-          <Route path="/" element={<RegisterPage />} />
+          <Route path="/" element={<HomePage />} />
           
           {/* Protected Routes - require authentication */}
           <Route path="/chapter/:id" element={
