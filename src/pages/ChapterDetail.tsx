@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { chapters } from '../data/chapters';
 import { ChapterLessonsContent } from '../components/ChapterLessonsContent';
 import { Navigation } from '../components/ui/Navigation';
-import { PixelButton } from '../components/ui/PixelButton';
 import { PixelCard } from '../components/ui/PixelCard';
 import { AudioPlayer, AudioPlayerRef } from '../components/AudioPlayer';
 import { useButtonClickSound } from '../hooks/useButtonClickSound';

@@ -6,7 +6,6 @@ import { useCardHoverSound } from '../hooks/useCardHoverSound';
 import { useUserProgress } from '../hooks/useUserProgress';
 import { LoadingSpinner } from './ui/LoadingSpinner';
 import { PixelCard } from './ui/PixelCard';
-import { ProgressLine } from './ui/ProgressLine';
 import { AudioPlayer, AudioPlayerRef } from './AudioPlayer';
 import { PauseMenu } from './PauseMenu';
 import { usePauseMenu } from '../hooks/usePauseMenu';
@@ -33,7 +32,7 @@ export function ChapterLessonsContent({
   const { playHoverSound } = useCardHoverSound();
   const audioPlayerRef = useRef<AudioPlayerRef>(null);
   const { isPaused, openPauseMenu, closePauseMenu } = usePauseMenu();
-  const { isLessonCompleted, isLessonUnlocked, loading: progressLoading } = useUserProgress();
+  const { isLessonCompleted, isLessonUnlocked } = useUserProgress();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -124,18 +123,6 @@ export function ChapterLessonsContent({
         return "Initializing quest protocols...";
     }
   };
-
-  // Prepare lesson progress data for ProgressLine
-  const lessonProgressItems = chapter.lessons.map((lesson, index) => {
-    const isCompleted = isLessonCompleted(chapterIndex, index);
-    
-    return {
-      id: `lesson-${index}`,
-      label: lesson.name.length > 12 ? lesson.name.substring(0, 12) + '...' : lesson.name,
-      isCompleted,
-      isActive: selectedLesson?.lessonIndex === index
-    };
-  });
 
   // If a lesson is selected, show the LessonStageViewer
   if (selectedLesson) {

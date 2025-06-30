@@ -6,17 +6,15 @@ import { PixelButton } from './PixelButton';
 import { PixelCard } from './PixelCard';
 
 import { useButtonHoverSound } from '../../hooks/useButtonHoverSound';
-import { chapters, getTotalCodingStagesInChapter } from '../../data/chapters';
+import { chapters } from '../../data/chapters';
 
 export function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
   const { user, signOut } = useAuth();
   const { playButtonSound } = useButtonHoverSound();
-  const { loading: progressLoading, isLessonCompleted, lessonProgress, stageProgress } = useUserProgress() as {
+  const { loading: progressLoading, stageProgress } = useUserProgress() as {
     loading: boolean;
-    isLessonCompleted: (chapterIndex: number, lessonIndex: number) => boolean;
-    lessonProgress: any[];
     stageProgress: any[];
   };
 

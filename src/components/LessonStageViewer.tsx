@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Lesson, Stage, getStageNumber, getTotalStagesInChapter, getGlobalCodingStageNumber } from '../data/chapters';
+import { Lesson, Stage } from '../data/chapters';
 import { PixelButton } from './ui/PixelButton';
 import { PixelCard } from './ui/PixelCard';
 import { CodeEditor } from './ui/CodeEditor';
@@ -32,16 +32,11 @@ export function LessonStageViewer({ lesson, chapterIndex, lessonIndex, onReturn 
   const { playTestPassSound } = useTestPassSound();
   const { playWinSound } = useWinSound();
   const codeEditorRef = useRef<any>(null);
-  const { isStageCompleted, isStageUnlocked, completeStage, completeLesson, isLessonCompleted } = useUserProgress();
+  const { isStageCompleted, isStageUnlocked, completeStage, completeLesson } = useUserProgress();
 
   const currentStage = lesson.stages[currentStageIndex];
-  const isFirstStage = currentStageIndex === 0;
   const isLastStage = currentStageIndex === lesson.stages.length - 1;
   
-  // Get continuous stage numbering
-  const currentStageNumber = getStageNumber(chapterIndex, lessonIndex, currentStageIndex);
-  const totalStagesInChapter = getTotalStagesInChapter(chapterIndex);
-
   // Build an array of coding stage indices for this lesson
   const codingStageIndices = lesson.stages
     .map((stage, idx) => (stage.type === 'coding' ? idx : null))
@@ -132,7 +127,7 @@ export function LessonStageViewer({ lesson, chapterIndex, lessonIndex, onReturn 
       const functionName = functionMatch[1];
       
       const results = await Promise.all(
-        currentStage.testCases.map(async (testCase, index) => {
+        currentStage.testCases?.map(async (testCase, index) => {
           try {
             // Create a safe execution environment
             const testFunction = new Function('return ' + code)();
@@ -183,7 +178,7 @@ export function LessonStageViewer({ lesson, chapterIndex, lessonIndex, onReturn 
               error: error instanceof Error ? error.message : 'Unknown error'
             };
           }
-        })
+        }) || []
       );
       
       setTestResults(results);
@@ -210,7 +205,7 @@ export function LessonStageViewer({ lesson, chapterIndex, lessonIndex, onReturn 
     } catch (error) {
       console.error('General test error:', error);
       // Handle general errors
-      const errorResults = currentStage.testCases.map((testCase, index) => ({
+      const errorResults = currentStage.testCases?.map((testCase, index) => ({
         index,
         passed: false,
         input: testCase.input,
@@ -218,9 +213,9 @@ export function LessonStageViewer({ lesson, chapterIndex, lessonIndex, onReturn 
         actualOutput: null,
         description: testCase.description,
         error: error instanceof Error ? error.message : 'Code execution error'
-      }));
+      })) || [];
       
-      setTestResults(errorResults);
+      setTestResults(errorResults || []);
       setTestRunStatus('failed');
     }
   };
